@@ -53,10 +53,29 @@ namespace dc_snoop_database_writer
                 var vote1211 = parameters[16];
                 var singleMemberDistrict = parameters[17];
 
+                var streetParts = street.Split(new char[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
+                var streetNumber = streetParts[0];
+                var streetName = "";
+                for (var i = 1; i < streetParts.Length - 2; i++)
+                {
+                    streetName = streetParts[i];
+                }
+                streetName = streetName.Trim();
+                var streetType = streetParts[streetParts.Length - 2];
+                var streetQuad = streetParts[streetParts.Length - 1];
+
                 var address = FindAddress(street, zip, addresses);
                 if (address == null)
                 {
-                    address = new Addresses { Street = street, Zip = zip, Precinct = precinct, Ward = ward };
+                    address = new Addresses {
+                        StreetNumber = streetNumber,
+                        StreetName = streetName,
+                        StreetType = streetType,
+                        StreetQuadrant = streetQuad, 
+                        Street = street, 
+                        Zip = zip, 
+                        Precinct = precinct, 
+                        Ward = ward };
                     addresses.Add(street+zip, address);
                     context.Addresses.Add(address);
                 }
